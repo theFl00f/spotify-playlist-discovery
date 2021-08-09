@@ -1,4 +1,4 @@
-import { login } from "../../api/auth/login";
+import { login } from "../../api/auth";
 
 export const Index = () => {
   return (
