@@ -51,11 +51,11 @@ export const Home = () => {
   }
 
   return (
-    <div>
+    <>
       <h1>Home</h1>
       {accessToken && <p>Authenticated</p>}
       {userProfile && <UserProfile user={userProfile} />}
       {!!topArtists && <TopArtists artists={topArtists} />}
-    </div>
+    </>
   );
 };
