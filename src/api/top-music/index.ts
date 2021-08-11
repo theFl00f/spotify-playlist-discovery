@@ -1,1 +1,1 @@
-export { default as getTopArtists } from "./getTopArtists";
+export { default as getTopArtists, TimeRange } from "./getTopArtists";

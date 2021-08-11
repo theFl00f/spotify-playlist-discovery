@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 import { getMe } from "../../api/auth/";
 import { ensureAccessToken } from "../../api/shared";
-import { getTopArtists } from "../../api/top-music";
+import { getTopArtists, TimeRange } from "../../api/top-music";
 import { TopArtists } from "./TopArtists";
 import { UserProfile } from "./UserProfile";
 
@@ -10,6 +10,13 @@ export const Home = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState(null);
   const [topArtists, setTopArtists] = useState<Artist[] | null>(null);
+  const [nextTopArtistsURL, setNextTopArtistsURL] = useState<string | null>(
+    null
+  );
+  const [previousTopArtistsURL, setPreviousTopArtistsURL] = useState<
+    string | null
+  >(null);
+  const [timeRange, setTimeRange] = useState<TimeRange>(TimeRange.MEDIUM);
 
   const location = useLocation();
 
@@ -19,7 +26,7 @@ export const Home = () => {
       const response = await getMe(token);
       setUserProfile(response.data);
     } catch (e) {
-      console.log(e);
+      return <Redirect to={"/"} />;
     }
   }, [accessToken]);
 
@@ -29,14 +36,15 @@ export const Home = () => {
 
   const fetchTopArtists = useCallback(async () => {
     const token = ensureAccessToken(accessToken);
+
     try {
-      const response = await getTopArtists(token);
-      console.log(response.data.items);
+      const response = await getTopArtists(token, timeRange);
       setTopArtists(response.data.items);
+      setNextTopArtistsURL(response.data.next);
     } catch (e) {
       console.log(e);
     }
-  }, [accessToken]);
+  }, [accessToken, timeRange]);
 
   useEffect(() => {
     fetchTopArtists();
@@ -53,9 +61,25 @@ export const Home = () => {
   return (
     <>
       <h1>Home</h1>
-      {accessToken && <p>Authenticated</p>}
-      {userProfile && <UserProfile user={userProfile} />}
-      {!!topArtists && <TopArtists artists={topArtists} />}
+      {accessToken && (
+        <>
+          <p>Authenticated</p>
+          {userProfile && <UserProfile user={userProfile} />}
+          {!!topArtists && (
+            <TopArtists
+              artists={topArtists}
+              timeRange={timeRange}
+              setTimeRange={setTimeRange}
+              previousTopArtistsURL={previousTopArtistsURL}
+              nextTopArtistsURL={nextTopArtistsURL}
+              setTopArtists={setTopArtists}
+              setNextTopArtistsURL={setNextTopArtistsURL}
+              token={accessToken}
+              setPreviousTopArtistsURL={setPreviousTopArtistsURL}
+            />
+          )}
+        </>
+      )}
     </>
   );
 };
