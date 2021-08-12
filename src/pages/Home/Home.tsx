@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Redirect, useLocation } from "react-router-dom";
-import { getMe } from "../../api/auth/";
-import { ensureAccessToken } from "../../api/shared";
-import { getTopArtists, TimeRange } from "../../api/top-music";
+import { ensureAccessToken, getTopArtists, TimeRange, getMe } from "../../api";
 import { TopArtists } from "./TopArtists";
 import { UserProfile } from "./UserProfile";
 
@@ -17,16 +15,20 @@ export const Home = () => {
     string | null
   >(null);
   const [timeRange, setTimeRange] = useState<TimeRange>(TimeRange.MEDIUM);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   const location = useLocation();
 
   const fetchMe = useCallback(async () => {
+    setIsAuthenticated(null);
     const token = ensureAccessToken(accessToken);
     try {
       const response = await getMe(token);
       setUserProfile(response.data);
+      setIsAuthenticated(true);
     } catch (e) {
-      return <Redirect to={"/"} />;
+      console.log(e);
+      setIsAuthenticated(false);
     }
   }, [accessToken]);
 
@@ -56,6 +58,10 @@ export const Home = () => {
     if (access_token && access_token !== accessToken) {
       setAccessToken(access_token);
     }
+  }
+
+  if (isAuthenticated !== null && !isAuthenticated) {
+    return <Redirect to="/" />;
   }
 
   return (

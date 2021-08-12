@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { FC } from "react";
 import styled from "styled-components";
-import { TimeRange } from "../../../api/top-music";
+import { TimeRange } from "../../../api";
 
 interface Props {
   timeRange: TimeRange;

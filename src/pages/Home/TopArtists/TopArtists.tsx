@@ -1,6 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from "react";
 import styled from "styled-components";
-import { TimeRange } from "../../../api/top-music";
+import { TimeRange } from "../../../api";
+import { mediaQuery, ScreenSize } from "../../../util";
 import LoadMoreButton from "../../shared/LoadMoreButton";
 import ArtistItem from "./ArtistItem";
 import TopArtistTimeRangeForm from "./TopArtistTimeRangeForm";
@@ -19,9 +20,11 @@ interface Props {
 }
 
 const ArtistList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
+  display: grid;
+  grid-auto-rows: auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1.4rem;
+  ${mediaQuery(ScreenSize.LG, `grid-template-columns: 1fr;`)}
 `;
 
 const TopArtists: FC<Props> = ({

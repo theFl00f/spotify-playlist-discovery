@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { Dispatch, FC, SetStateAction } from "react";
-import { getAuthHeaders } from "../../api/shared";
+import { getAuthHeaders } from "../../api";
 
 interface Props {
   url: string;
@@ -17,7 +17,7 @@ const LoadMoreButton: FC<Props> = ({
   children,
 }) => {
   const handleClick = async () => {
-    const response = await axios.get(url, { headers: getAuthHeaders(token) });
+    const response = await axios.get(url, getAuthHeaders(token));
     setState(response.data.items);
     setPrev && setPrev(response.data.previous);
   };

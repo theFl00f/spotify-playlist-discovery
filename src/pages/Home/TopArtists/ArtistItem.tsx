@@ -1,14 +1,14 @@
 import React, { FC } from "react";
 import styled from "styled-components";
+import { mediaQuery, ScreenSize } from "../../../util";
 
 interface Props {
   artist: Artist;
 }
 
 const Artist = styled.article`
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  grid-gap: 1rem;
+  display: flex;
+  gap: 1rem;
 
   h2 {
     margin: 0;
@@ -16,39 +16,44 @@ const Artist = styled.article`
 `;
 
 const ImageContainer = styled.div`
-  max-width: 100%;
-  overflow: hidden;
-  position: relative;
+  flex-basis: 25%;
+  max-height: 8rem;
+  max-width: 8rem;
 
-  &::after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
-  }
+  min-height: 4.4rem;
+  min-width: 4.4rem;
+
+  ${mediaQuery(ScreenSize.SM, `flex-basis: ${100 / 3}%;`)}
 
   img {
     object-fit: cover;
+    aspect-ratio: 1 / 1;
     width: 100%;
-    height: 100%;
-    position: absolute;
   }
+`;
+
+const TextContainer = styled.section`
+  flex-basis: 75%;
+  ${mediaQuery(ScreenSize.SM, `flex-basis: ${(100 / 3) * 2}%`)}
 `;
 
 const ArtistItem: FC<Props> = ({ artist }) => {
   const { name, popularity, genres, images } = artist;
   const { url: imgSrc } = images[1];
   return (
-    <Artist>
-      <ImageContainer>
-        <img src={imgSrc} alt={`The musical artist ${name}`} />
-      </ImageContainer>
-      <section>
-        <h2>
-          {name} ({popularity})
-        </h2>
-        <small>{genres.join(", ")}</small>
-      </section>
-    </Artist>
+    <li>
+      <Artist>
+        <ImageContainer>
+          <img src={imgSrc} alt={`The musical artist ${name}`} />
+        </ImageContainer>
+        <TextContainer>
+          <h2>
+            {name} ({popularity})
+          </h2>
+          <small>{genres.join(", ")}</small>
+        </TextContainer>
+      </Artist>
+    </li>
   );
 };
 

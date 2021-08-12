@@ -12,9 +12,10 @@ const getTopArtists = (
   timeRange: TimeRange | undefined = TimeRange.MEDIUM
 ) => {
   const params = new URLSearchParams([["time_range", timeRange]]);
-  return axios.get(`${MUSIC_BASE_URL}/v1/me/top/artists?${params}`, {
-    headers: getAuthHeaders(token),
-  });
+  return axios.get(
+    `${MUSIC_BASE_URL}/v1/me/top/artists?${params}`,
+    getAuthHeaders(token)
+  );
 };
 
 export default getTopArtists;

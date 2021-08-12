@@ -1,5 +1,5 @@
 const getAuthHeaders = (token: string) => {
-  return { Authorization: `Bearer ${token}` };
+  return { headers: { Authorization: `Bearer ${token}` } };
 };
 
 export default getAuthHeaders;
