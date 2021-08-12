@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Redirect, useLocation } from "react-router-dom";
 import { ensureAccessToken, getTopArtists, TimeRange, getMe } from "../../api";
+import sortGenres from "../../util/sortGenres";
 import { TopArtists } from "./TopArtists";
 import { UserProfile } from "./UserProfile";
 
@@ -16,6 +17,7 @@ export const Home = () => {
   >(null);
   const [timeRange, setTimeRange] = useState<TimeRange>(TimeRange.MEDIUM);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [userGenres, setUserGenres] = useState<Set<string> | null>(null);
 
   const location = useLocation();
 
@@ -43,6 +45,13 @@ export const Home = () => {
       const response = await getTopArtists(token, timeRange);
       setTopArtists(response.data.items);
       setNextTopArtistsURL(response.data.next);
+
+      const genres = response.data.items
+        .map((item: Artist) => item.genres)
+        .flat(Infinity);
+
+      sortGenres(genres);
+      setUserGenres(genres);
     } catch (e) {
       console.log(e);
     }

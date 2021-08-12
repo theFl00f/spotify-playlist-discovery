@@ -1,5 +1,5 @@
 export { getMe, login } from "./auth";
-export { getRecommendationGenres } from "./recommendations";
+export { getRecommendations } from "./recommendations";
 export { getTopArtists, TimeRange } from "./top-music";
 export {
   ACCOUNTS_BASE_URL,

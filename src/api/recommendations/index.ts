@@ -1,1 +1,1 @@
-export { default as getRecommendationGenres } from "./getRecommendationGenres";
+export { default as getRecommendations } from "./getRecommendations";
