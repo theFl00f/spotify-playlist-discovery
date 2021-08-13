@@ -1,4 +1,4 @@
-interface SortedGenres {
+export interface SortedGenres {
   name: string;
   count: number;
 }
